@@ -183,6 +183,8 @@ def warns(bot: Bot, update: Update, args: List[str]):
     chat = update.effective_chat  # type: Optional[Chat]
     user_id = extract_user(message, args) or update.effective_user.id
     result = sql.get_warns(user_id, chat.id)
+    user = update.effective_user
+    warned = chat.get_member(user_id).user 
 
     P = 1
 
@@ -190,17 +192,17 @@ def warns(bot: Bot, update: Update, args: List[str]):
         num_warns, reasons = result
         limit, soft_warn = sql.get_warn_setting(chat.id)
 
-        text = "This user has {}/{} warnings, for the following reasons:".format(num_warns, limit)
+        text = "{} has {}/{} warnings, for the following reasons:".format(mention_html(warned.id, warned.first_name),num_warns, limit)
         for reason in reasons:
-            text += "\n {}. `{}`".format(P, reason)
+            text += "\n {}. <code>{}</code>".format(P, reason)
             P = P + 1
 
         msgs = split_message(text)
         for msg in msgs:
-            update.effective_message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
+            update.effective_message.reply_text(msg, parse_mode=ParseMode.HTML)
 
     else:
-        update.effective_message.reply_text("This user hasn't got any warnings!")
+        update.effective_message.reply_text("{} hasn't got any warnings!".format(mention_html(warned.id, warned.first_name)), parse_mode=ParseMode.HTML)
 
 
 # Dispatcher handler stop - do not async

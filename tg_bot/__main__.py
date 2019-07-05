@@ -20,15 +20,13 @@ from tg_bot.modules.helper_funcs.misc import paginate_modules
 from tg_bot.modules.translations.strings import tld, tld_help 
 from tg_bot.modules.connection import connected
 
-PM_START = """Hi {}, My name is {} - I'm here to help you manage your groups!
-I'm a modular group management bot with a few fun extras! Have a look at the following for an idea of some of the things I can help you with.
-I'm built in python3, using the python-telegram-bot library,
-Click Help button to find out more about how to use me to my full potential. Join to my [NEWS CHANNEL](https://t.me/joinchat/AAAAAFSlDsiCWeq9UhYLGg) for announcements on new features, downtime, etc."""
+PM_START = """Hi {}, My name is {} - I'm here to help you manage your groups! I'm a modular group management bot with a few fun extras! I'm built in python3, using the python-telegram-bot library,Click Help button to find out more about how to use me to my full potential. Join to my [NEWS CHANNEL](https://t.me/joinchat/AAAAAFSlDsiCWeq9UhYLGg) for announcements on new features, downtime, etc.
+Want to add me to your chat? [Click here](http://t.me/msmonicabot?startgroup=botstart)
+"""
 
 DONATE_STRING = """Heya, glad to hear you want to donate!
-It took lots of work for [my creator](t.me/SonOfLars) to get me to where I am now, and every donation helps \
-motivate him to make me even better. All the donation money will go to a better VPS to host me, and/or beer \. 
-https://orangefox.tech/donate."""
+It took lots of work for my creator to get me to where I am now, and every donation helps motivate him more.
+OR Donate your money to our mother earth for better future. https://standfortrees.org/en/"""
 
 
 IMPORTED = {}

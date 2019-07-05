@@ -2,21 +2,22 @@ import html
 import json
 import random
 import time
-import os
+import os, sys
 from pyowm import timeutils, exceptions
 from datetime import datetime
 from typing import Optional, List
+from PIL import Image 
 
 import requests
 from telegram import Message, Chat, Update, Bot, MessageEntity
 from telegram import ParseMode
-from telegram.ext import CommandHandler, run_async, Filters
+from telegram.ext import CommandHandler, run_async, Filters, MessageHandler
 from telegram.utils.helpers import escape_markdown, mention_html
 
 from tg_bot import dispatcher, OWNER_ID, SUDO_USERS, SUPPORT_USERS, WHITELIST_USERS, BAN_STICKER
 from tg_bot.__main__ import GDPR
 from tg_bot.__main__ import STATS, USER_INFO
-from tg_bot.modules.disable import DisableAbleCommandHandler
+from tg_bot.modules.disable import DisableAbleCommandHandler, DisableAbleRegexHandler
 from tg_bot.modules.helper_funcs.extraction import extract_user
 from tg_bot.modules.helper_funcs.filters import CustomFilters
 from tg_bot.modules.helper_funcs.chat_status import is_user_admin, user_admin, can_restrict 
@@ -39,10 +40,16 @@ def runs(bot: Bot, update: Update):
 def slap(bot: Bot, update: Update, args: List[str]):
     chat = update.effective_chat  # type: Optional[Chat]
     msg = update.effective_message  # type: Optional[Message]
-
+    user_id = extract_user(update.effective_message, args)
     # reply to correct message
-    reply_text = msg.reply_to_message.reply_text if msg.reply_to_message else msg.reply_text
+    reply_text = msg.reply_to_message.reply_text if msg.reply_to_message else msg.reply_text 
 
+    if user_id == OWNER_ID:
+        msg.reply_text("I'm not gonna slap my owner are you crazy?")
+        return
+    if user_id == bot.id: 
+        msg.reply_text("I'll slap myself so funny.")
+        return
     # get user who sent message
     if msg.from_user.username:
         curr_user = "@" + escape_markdown(msg.from_user.username)
@@ -164,10 +171,10 @@ def info(bot: Bot, update: Update, args: List[str]):
                 text += tld(chat.id, "\nThis person has been whitelisted! " \
                         "That means I'm not allowed to ban/kick them.")
 
-    for mod in USER_INFO:
-        mod_info = mod.__user_info__(user.id, chat.id).strip()
-        if mod_info:
-            text += "\n\n" + mod_info
+    #for mod in USER_INFO:
+       # mod_info = mod.__user_info__(user.id, chat.id).strip()
+       # if mod_info:
+        #    text += "\n\n" + mod_info
 
     update.effective_message.reply_text(text, parse_mode=ParseMode.HTML)
 
@@ -248,25 +255,46 @@ def getsticker(bot: Bot, update: Update):
             file_id = msg.reply_to_message.sticker.file_id 
             newFile = bot.get_file(file_id)
             newFile.download('sticker.png')
-            bot.sendDocument(chat_id, document=open('sticker.png', 'rb'))
-            os.remove("sticker.png")
+            size = 512,512
+            try:
+               im = Image.open('sticker.png')
+               im.thumbnail(size, Image.ANTIALIAS)
+               im.save("sticker.png", "png") 
+               bot.sendDocument(chat_id, document=open('sticker.png', 'rb'))
+            except IOError: 
+                   update.effective_message.reply_text(tld(chat_id,"Oops! Something went wrong kindly report my master at @dopmherebot."))
+            os.remove("sticker.png")       
        elif msg.reply_to_message.photo:
-            file_id = msg.reply_to_message.photo[-1].file_id
+            file_id = msg.reply_to_message.photo[-1].file_id 
             newFile = bot.get_file(file_id)
             newFile.download('sticker.png')
-            bot.sendDocument(chat_id, document=open('sticker.png', 'rb'))
+            size = 512,512
+            try:
+               im = Image.open('sticker.png')
+               im.thumbnail(size, Image.ANTIALIAS)
+               im.save("sticker.png", "png") 
+               bot.sendDocument(chat_id, document=open('sticker.png', 'rb'))
+            except IOError: 
+                   update.effective_message.reply_text(tld(chat_id,"Oops! Something went wrong kindly report my master at @dopmherebot."))
             os.remove("sticker.png")
        elif msg.reply_to_message.document:
             file_id = msg.reply_to_message.document.file_id
             newFile = bot.get_file(file_id)
             newFile.download('sticker.png')
-            bot.sendDocument(chat_id, document=open('sticker.png', 'rb'))
-            os.remove("sticker.png") 
+            size = 512,512
+            try:
+               im = Image.open('sticker.png')
+               im.thumbnail(size, Image.ANTIALIAS)
+               im.save("sticker.png", "png") 
+               bot.sendDocument(chat_id, document=open('sticker.png', 'rb'))
+            except IOError: 
+                   update.effective_message.reply_text(tld(chat_id,"Oops! Something went wrong kindly report my master at @dopmherebot."))
+            os.remove("sticker.png")
        else:
-           update.effective_message.reply_text(tld(chat_id, "Unknown format sticker/photo/document are the supported formats."))
+           update.effective_message.reply_text(tld(chat_id, "Unknown format. sticker/photo/document are the supported formats."))
     else:
         update.effective_message.reply_text(tld(chat_id, "Please reply to a sticker/photo/document for me to upload its PNG."))
-
+           
 
 @run_async
 def gdpr(bot: Bot, update: Update):
@@ -296,7 +324,7 @@ def markdown_help(bot: Bot, update: Update):
 @run_async
 def stats(bot: Bot, update: Update):
     update.effective_message.reply_text("Current stats:\n" + "\n".join([mod.__stats__() for mod in STATS])) 
-    
+     
 @run_async 
 @user_admin
 def ping(bot: Bot, update: Update): 

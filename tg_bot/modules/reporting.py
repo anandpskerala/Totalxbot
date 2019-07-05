@@ -10,6 +10,7 @@ from tg_bot import dispatcher, LOGGER
 from tg_bot.modules.helper_funcs.chat_status import user_not_admin, user_admin
 from tg_bot.modules.log_channel import loggable
 from tg_bot.modules.sql import reporting_sql as sql
+from tg_bot.modules.translations.strings import tld
 
 REPORT_GROUP = 5
 
@@ -76,6 +77,7 @@ def report(bot: Bot, update: Update) -> str:
                    "<a href=\"http://telegram.me/{}/{}\">click here</a>".format(chat.username, message.message_id)
 
             should_forward = False
+            message.reply_text(tld(chat.id, "Report sent"))
 
         else:
             msg = "{} is calling for admins in \"{}\"!".format(mention_html(user.id, user.first_name),

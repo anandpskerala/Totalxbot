@@ -47,7 +47,7 @@ def send_rules(update, chat_id, from_pm=False):
          else:   
              try:
                  bot.send_message(user.id, rules, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True)
-                 update.effective_message.reply_text("I've PM'ed you this group rule's!")
+                 update.effective_message.reply_text("I've PM'ed you this Group’s rule!")
              except Unauthorized:
                  update.effective_message.reply_text("Contact me in PM to get this group's rules!",
                                             reply_markup=InlineKeyboardMarkup(

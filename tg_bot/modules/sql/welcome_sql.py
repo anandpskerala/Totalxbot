@@ -7,7 +7,7 @@ from sqlalchemy import Column, String, Boolean, UnicodeText, Integer, BigInteger
 from tg_bot.modules.helper_funcs.msg_types import Types
 from tg_bot.modules.sql import SESSION, BASE
 
-DEFAULT_WELCOME = random.choice(["I'm glad you joined, {first}!", "Cheers, love! {first}'s here!", "{first} is here to kick butt and chew bubblegum.", "Enjoy your stay,{first}!", "Hey {first}, how are you?!", "Swooooosh.{first} just landed."])
+DEFAULT_WELCOME = random.choice(["I'm glad you joined, {first}!", "Cheers, love! {first}'s here!", "{first} is here to kick butt and chew bubblegum.", "Swooooosh.{first} just landed.", "Hey {first}, how are you?!", "Welcome,{first} We were expecting you ( ͡° ͜ʖ ͡°)!"])
 
 DEFAULT_GOODBYE = random.choice(["Nice knowing you dear,{first}!", "bye,bye {first}", "I’ll miss you until we meet again, {first}"])
 
