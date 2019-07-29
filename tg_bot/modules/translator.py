@@ -146,10 +146,7 @@ def terjemah(bot: Bot, update: Update):
 				#	return message.reply_text("Translated from `{}` to `{}`:\n`{}`".format(target, target2, tekstr.pronunciation), parse_mode=ParseMode.MARKDOWN)
 				
 	except IndexError:
-		update.effective_message.reply_text("Reply to messages or write messages from other languages ​​for "
-                                                                                            "translated into the intended language\n\n"
-                                                                                            "Example: `/tr en-ml` to translate from English to Malayalam\n"
-                                                                                            "Or use: `/tr ml` for automatic detection and translating it into Malayalam", parse_mode="markdown")
+		update.effective_message.reply_text("Reply to messages or write messages from other languages ​​for translating into the intended language\n\nExample: `/tr en-ml` to translate from English to Malayalam\nOr use: `/tr ml` for automatic detection and translating it into Malayalam", parse_mode="markdown")
 	except ValueError:
 		update.effective_message.reply_text("The intended language is not found!")
 	else:
