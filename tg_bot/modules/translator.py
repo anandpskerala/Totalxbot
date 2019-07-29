@@ -11,22 +11,153 @@ from googletrans import Translator
 
 
 @run_async
-def do_translate(bot: Bot, update: Update, args: List[str]):
-    msg = update.effective_message # type: Optional[Message]
-    lan = " ".join(args)
-    to_translate_text = msg.reply_to_message.text
-    translator = Translator()
-    try:
-        translated = translator.translate(to_translate_text, dest=lan)
-        src_lang = translated.src
-        translated_text = translated.text
-        msg.reply_text("Translated from {} to {}.\n `{}`".format(src_lang, lan, translated_text))
-    except :
-        msg.reply_text("Error")
+def terjemah(bot: Bot, update: Update):
+	msg = update.effective_message
+	chat_id = update.effective_chat.id
+	"""
+	lang = str("af,am,ar,az,be,bg,bn,bs,ca,ceb,co,cs,cy,da,de,el,en,eo,es,et,eu,fa,fi,fr,fy,ga,gd,gl,gu,ha,haw,hi,hmn,hr,ht,hu,hy,id,ig,is,it,iw,ja,jw,ka,kk,km,kn,ko,ku,ky,la,lb,lo,lt,lv,mg,mi,mk,ml,mn,mr,ms,mt,my,ne,nl,no,ny,pa,pl,ps,pt,ro,ru,sd,si,sk,sl,sm,sn,so,sq,sr,st,su,sv,sw,ta,te,tg,th,tl,tr,uk,ur,uz,vi,xh,yi,yo,zh,zh_CN,zh_TW,zu".split(","))
+	try:
+		if msg.reply_to_message and msg.reply_to_message.text:
+			args = update.effective_message.text.split(None, 1)
+			try:
+				target = args[1].split(None, 1)[0]
+			except:
+				target = args[1]
+			try:
+				target2 = args[1].split(None, 2)[1]
+				if target2 not in lang:
+					target2 = None
+				else:
+					target = args[1].split(None, 2)[0]
+					target2 = args[1].split(None, 2)[1]
+			except:
+				target2 = None
+			teks = msg.reply_to_message.text
+			message = update.effective_message
+			trl = Translator()
+			if target2 == None:
+				deteksibahasa = trl.detect(teks)
+				tekstr = trl.translate(teks, dest=target)
+				if tekstr.pronunciation == None:
+					return message.reply_text("Diterjemahkan dari `{}` ke `{}`:\n`{}`".format(deteksibahasa.lang, target, tekstr.text), parse_mode=ParseMode.MARKDOWN)
+				else:
+					return message.reply_text("Diterjemahkan dari `{}` ke `{}`:\n*Aksara:*\n`{}`\n*Teks:*\n`{}`".format(deteksibahasa.lang, target, tekstr.text, tekstr.pronunciation), parse_mode=ParseMode.MARKDOWN)
+			else:
+				tekstr = trl.translate(teks, dest=target2, src=target)
+				if tekstr.pronunciation == None:
+					return message.reply_text("Diterjemahkan dari `{}` ke `{}`:\n`{}`".format(target, target2, tekstr.text), parse_mode=ParseMode.MARKDOWN)
+				else:
+					return message.reply_text("Diterjemahkan dari `{}` ke `{}`:\n*Aksara:*\n`{}`\n*Teks:*\n`{}`".format(target, target2, tekstr.text, tekstr.pronunciation), parse_mode=ParseMode.MARKDOWN)
+			
+		else:
+			args = update.effective_message.text.split(None, 2)
+			target = args[1]
+			try:
+				target2 = args[2].split(None, 1)[0]
+				if target2 not in lang:
+					target2 = None
+					teks = args[2]
+				else:
+					target2 = args[2].split(None, 1)[0]
+					teks = args[2].split(None, 1)[1]
+			except:
+				target2 = None
+				teks = args[2]
+			message = update.effective_message
+			trl = Translator()
+			if target2 == None:
+				deteksibahasa = trl.detect(teks)
+				tekstr = trl.translate(teks, dest=target)
+				if tekstr.pronunciation == None:
+					return message.reply_text("Diterjemahkan dari `{}` ke `{}`:\n`{}`".format(deteksibahasa.lang, target, tekstr.text), parse_mode=ParseMode.MARKDOWN)
+				else:
+					return message.reply_text("Diterjemahkan dari `{}` ke `{}`:\n*Aksara:*\n`{}`\n*Teks:*\n`{}`".format(deteksibahasa.lang, target, tekstr.text, tekstr.pronunciation), parse_mode=ParseMode.MARKDOWN)
+			else:
+				tekstr = trl.translate(teks, dest=target2, src=target)
+				if tekstr.pronunciation == None:
+					return message.reply_text("Diterjemahkan dari `{}` ke `{}`:\n`{}`".format(target, target2, tekstr.text), parse_mode=ParseMode.MARKDOWN)
+				else:
+					return message.reply_text("Diterjemahkan dari `{}` ke `{}`:\n*Aksara:*\n`{}`\n*Teks:*\n`{}`".format(target, target2, tekstr.text, tekstr.pronunciation), parse_mode=ParseMode.MARKDOWN)
+	"""
+	try:
+		if msg.reply_to_message and msg.reply_to_message.text:
+			args = update.effective_message.text.split(None, 1)
+			target2 = None
+			try:
+				target = args[1].split(None, 1)[0]
+			except:
+				target = args[1]
+			if "-" in target:
+				target2 = target.split("-")[1]
+				target = target.split("-")[0]
+			teks = msg.reply_to_message.text
+			#teks = deEmojify(teks)
+			exclude_list = UNICODE_EMOJI.keys()
+			for emoji in exclude_list:
+				if emoji in teks:
+					teks = teks.replace(emoji, '')
+			message = update.effective_message
+			trl = Translator()
+			if target2 == None:
+				deteksibahasa = trl.detect(teks)
+				tekstr = trl.translate(teks, dest=target)
+				if tekstr.pronunciation == None:
+					return message.reply_text("Diterjemahkan dari `{}` ke `{}`:\n`{}`".format(deteksibahasa.lang, target, tekstr.text), parse_mode=ParseMode.MARKDOWN)
+				else:
+					return message.reply_text("Diterjemahkan dari `{}` ke `{}`:\n`{}`".format(deteksibahasa.lang, target, tekstr.pronunciation), parse_mode=ParseMode.MARKDOWN)
+			else:
+				tekstr = trl.translate(teks, dest=target2, src=target)
+				if tekstr.pronunciation == None:
+					return message.reply_text("Diterjemahkan dari `{}` ke `{}`:\n`{}`".format(target, target2, tekstr.text), parse_mode=ParseMode.MARKDOWN)
+				else:
+					return message.reply_text("Diterjemahkan dari `{}` ke `{}`:\n`{}`".format(target, target2, tekstr.pronunciation), parse_mode=ParseMode.MARKDOWN)
+			
+		else:
+			args = update.effective_message.text.split(None, 2)
+			target = args[1]
+			teks = args[2]
+			#teks = deEmojify(teks)
+			exclude_list = UNICODE_EMOJI.keys()
+			for emoji in exclude_list:
+				if emoji in teks:
+					teks = teks.replace(emoji, '')
+			target2 = None
+			if "-" in target:
+				target2 = target.split("-")[1]
+				target = target.split("-")[0]
+			message = update.effective_message
+			trl = Translator()
+			if target2 == None:
+				deteksibahasa = trl.detect(teks)
+				tekstr = trl.translate(teks, dest=target)
+				return message.reply_text("Diterjemahkan dari `{}` ke `{}`:\n`{}`".format(deteksibahasa.lang, target, tekstr.text), parse_mode=ParseMode.MARKDOWN)
+				#if tekstr.pronunciation == None:
+				#	return message.reply_text("Diterjemahkan dari `{}` ke `{}`:\n`{}`".format(deteksibahasa.lang, target, tekstr.text), parse_mode=ParseMode.MARKDOWN)
+				#else:
+				#	return message.reply_text("Diterjemahkan dari `{}` ke `{}`:\n`{}`".format(deteksibahasa.lang, target, tekstr.pronunciation), parse_mode=ParseMode.MARKDOWN)
+			else:
+				tekstr = trl.translate(teks, dest=target2, src=target)
+				message.reply_text("Diterjemahkan dari `{}` ke `{}`:\n`{}`".format(target, target2, tekstr.text), parse_mode=ParseMode.MARKDOWN)
+				#if tekstr.pronunciation == None:
+				#	return message.reply_text("Diterjemahkan dari `{}` ke `{}`:\n`{}`".format(target, target2, tekstr.text), parse_mode=ParseMode.MARKDOWN)
+				#else:
+				#	return message.reply_text("Diterjemahkan dari `{}` ke `{}`:\n`{}`".format(target, target2, tekstr.pronunciation), parse_mode=ParseMode.MARKDOWN)
+				
+	except IndexError:
+		update.effective_message.reply_text("Balas pesan atau tulis pesan dari bahasa lain untuk "
+											"diterjemahkan kedalam bahasa yang di dituju\n\n"
+											"Contoh: `/tr en-id` untuk menerjemahkan dari Bahasa inggris ke Bahasa Indonesia\n"
+											"Atau gunakan: `/tr id` untuk deteksi otomatis dan menerjemahkannya kedalam bahasa indonesia", parse_mode="markdown")
+	except ValueError:
+		update.effective_message.reply_text("Bahasa yang di tuju tidak ditemukan!")
+	else:
+		return
 
 
 __help__ = """- /tr (language code) as reply to a long message.
 """
 __mod_name__ = "Translator"
 
-dispatcher.add_handler(DisableAbleCommandHandler("tr", do_translate, pass_args=True))
+TERJEMAH_HANDLER = DisableAbleCommandHandler("tr", terjemah)
+
+dispatcher.add_handler(TERJEMAH_HANDLER)
