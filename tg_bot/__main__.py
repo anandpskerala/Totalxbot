@@ -20,8 +20,10 @@ from tg_bot.modules.helper_funcs.misc import paginate_modules
 from tg_bot.modules.translations.strings import tld, tld_help 
 from tg_bot.modules.connection import connected
 
-PM_START = """Hi {}, My name is {} - I'm here to help you manage your groups! I'm a modular group management bot with a few fun extras! I'm built in python3, using the python-telegram-bot library,Click Help button to find out more about how to use me to my full potential. Join to my [NEWS CHANNEL](https://t.me/joinchat/AAAAAFSlDsiCWeq9UhYLGg) for announcements on new features, downtime, etc.
-Want to add me to your chat? [Click here](http://t.me/msmonicabot?startgroup=botstart)
+PM_START = """Hey there! My name is Mia X - I'm here to help you manage your groups!\n\
+Click Help button to find out more about how to use me to my full potential.\n\nJoin [Mia support Group](https://t.me/Mia_support) ( @keralasbots ) if you need any support or help\n\n\
+Follow [Mia](https://t.me/Miss_miabot) if you want to keep up with the news, updates and bot downtime!\n\n\
+Made by @MarioArus\n\nWant to add me to your group? [Click here!](t.me/missxmia_bot?startgroup=true)"
 """
 
 DONATE_STRING = """Heya, glad to hear you want to donate!
@@ -138,7 +140,8 @@ def send_start(bot, update):
     text = PM_START
 
 
-    keyboard = [[InlineKeyboardButton(text="🛠 Control panel", callback_data="cntrl_panel_M")]]
+    keyboard = [[InlineKeyboardButton(text="📢 Support Group", url="https://t.me/Mia_support")]]
+    keyboard += [[InlineKeyboardButton(text="🛠 Control panel", callback_data="cntrl_panel_M")]]
     keyboard += [[InlineKeyboardButton(text="🇺🇸 Language", callback_data="set_lang_"), 
         InlineKeyboardButton(text="❔ Help", callback_data="help_back")]]
     update.effective_message.reply_text(PM_START.format(escape_markdown(first_name), bot.first_name), reply_markup=InlineKeyboardMarkup(keyboard), disable_web_page_preview=True, parse_mode=ParseMode.MARKDOWN)
@@ -160,7 +163,7 @@ def control_panel(bot, update):
 
         print(query.data)
     else:
-        M_match = "Monica is best bot"
+        M_match = "Mia is best bot"
 
     if M_match:
         text = "*Control panel* 🛠 (beta)"
@@ -187,7 +190,7 @@ def control_panel(bot, update):
         else:
             text += "\nNo chat connected!"
 
-        keyboard += [[InlineKeyboardButton(text="Back", callback_data="bot_start")]]
+        keyboard += [[InlineKeyboardButton(text="⬅️ Back", callback_data="bot_start")]]
 
         update.effective_message.reply_text(text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode=ParseMode.MARKDOWN)
 
@@ -206,7 +209,7 @@ def control_panel(bot, update):
                 CHAT_SETTINGS[module].__mod_name__) + R[0]
 
             keyboard = R[1]
-            keyboard += [[InlineKeyboardButton(text="Back", callback_data="cntrl_panel_U(1)")]]
+            keyboard += [[InlineKeyboardButton(text="⬅️ Back", callback_data="cntrl_panel_U(1)")]]
                 
             query.message.reply_text(text=text, arse_mode=ParseMode.MARKDOWN, reply_markup=InlineKeyboardMarkup(keyboard))
 
@@ -245,7 +248,7 @@ def control_panel(bot, update):
             text = "*{}* has the following settings for the *{}* module:\n\n".format(
                 escape_markdown(chat.title), CHAT_SETTINGS[module].__mod_name__) + text
 
-            keyboard += [[InlineKeyboardButton(text="Back", callback_data="cntrl_panel_G_back")]]
+            keyboard += [[InlineKeyboardButton(text="⬅️ Back", callback_data="cntrl_panel_G_back")]]
                 
             query.message.reply_text(text=text, parse_mode=ParseMode.MARKDOWN, reply_markup=InlineKeyboardMarkup(keyboard))
 
@@ -323,7 +326,7 @@ def help_button(bot: Bot, update: Update):
             query.message.reply_text(text=text,
                                      parse_mode=ParseMode.MARKDOWN,
                                      reply_markup=InlineKeyboardMarkup(
-                                         [[InlineKeyboardButton(text=tld(chat.id, "Back"), callback_data="help_back")]]))
+                                         [[InlineKeyboardButton(text=tld(chat.id, "⬅️ Back"), callback_data="help_back")]]))
 
         elif prev_match:
             curr_page = int(prev_match.group(1))
@@ -383,7 +386,7 @@ def get_help(bot: Bot, update: Update):
             help_txt = HELPABLE[module].__help__
 
         text = tld(chat.id, "Here is the help for the *{}* module:\n{}").format(mod_name, help_txt)
-        send_help(chat.id, text, InlineKeyboardMarkup([[InlineKeyboardButton(text=tld(chat.id, "Back"), callback_data="help_back")]]))
+        send_help(chat.id, text, InlineKeyboardMarkup([[InlineKeyboardButton(text=tld(chat.id, "⬅️ Back"), callback_data="help_back")]]))
 
     else:
         send_help(chat.id, tld(chat.id, "send-help").format("" if not ALLOW_EXCL else tld(chat.id, "\nAll commands can either be used with `/` or `!`.\n")))
@@ -436,7 +439,7 @@ def settings_button(bot: Bot, update: Update):
             query.message.reply_text(text=text,
                                      parse_mode=ParseMode.MARKDOWN,
                                      reply_markup=InlineKeyboardMarkup(
-                                         [[InlineKeyboardButton(text="Back",
+                                         [[InlineKeyboardButton(text="⬅️ Back",
                                                                 callback_data="stngs_back({})".format(chat_id))]]))
 
         elif prev_match:
