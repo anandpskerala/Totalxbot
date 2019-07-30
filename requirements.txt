@@ -8,5 +8,5 @@ feedparser
 pyowm
 googletrans
 Pillow>=4.2.0
-#stuff for Text-To-Speech
+#stuff_for_Text-To-Speech
 gTTS
