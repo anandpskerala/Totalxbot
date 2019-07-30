@@ -37,5 +37,4 @@ def tts(bot: Bot, update: Update, args):
         update.message.reply_voice(speech, quote=False)
 
 
-
 dispatcher.add_handler(CommandHandler('tts', tts, pass_args=True))
