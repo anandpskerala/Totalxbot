@@ -13,7 +13,7 @@ from googletrans import Translator
 
 
 @run_async
-def terjemah(bot: Bot, update: Update):
+def totranslate(bot: Bot, update: Update):
 	msg = update.effective_message
 	chat_id = update.effective_chat.id
 	"""
@@ -34,18 +34,18 @@ def terjemah(bot: Bot, update: Update):
 					target2 = args[1].split(None, 2)[1]
 			except:
 				target2 = None
-			teks = msg.reply_to_message.text
+			text = msg.reply_to_message.text
 			message = update.effective_message
 			trl = Translator()
 			if target2 == None:
-				deteksibahasa = trl.detect(teks)
-				tekstr = trl.translate(teks, dest=target)
+				detection = trl.detect(text)
+				tekstr = trl.translate(text, dest=target)
 				if tekstr.pronunciation == None:
-					return message.reply_text("Translated from `{}` to `{}`:\n`{}`".format(deteksibahasa.lang, target, tekstr.text), parse_mode=ParseMode.MARKDOWN)
+					return message.reply_text("Translated from `{}` to `{}`:\n`{}`".format(detection.lang, target, tekstr.text), parse_mode=ParseMode.MARKDOWN)
 				else:
-					return message.reply_text("Translated from `{}` to `{}`:\n*Characters:*\n`{}`\n*Text:*\n`{}`".format(deteksibahasa.lang, target, tekstr.text, tekstr.pronunciation), parse_mode=ParseMode.MARKDOWN)
+					return message.reply_text("Translated from `{}` to `{}`:\n*Characters:*\n`{}`\n*Text:*\n`{}`".format(detection.lang, target, tekstr.text, tekstr.pronunciation), parse_mode=ParseMode.MARKDOWN)
 			else:
-				tekstr = trl.translate(teks, dest=target2, src=target)
+				tekstr = trl.translate(text, dest=target2, src=target)
 				if tekstr.pronunciation == None:
 					return message.reply_text("Translated from `{}` to `{}`:\n`{}`".format(target, target2, tekstr.text), parse_mode=ParseMode.MARKDOWN)
 				else:
@@ -58,24 +58,24 @@ def terjemah(bot: Bot, update: Update):
 				target2 = args[2].split(None, 1)[0]
 				if target2 not in lang:
 					target2 = None
-					teks = args[2]
+					text = args[2]
 				else:
 					target2 = args[2].split(None, 1)[0]
-					teks = args[2].split(None, 1)[1]
+					text = args[2].split(None, 1)[1]
 			except:
 				target2 = None
-				teks = args[2]
+				text = args[2]
 			message = update.effective_message
 			trl = Translator()
 			if target2 == None:
-				deteksibahasa = trl.detect(teks)
-				tekstr = trl.translate(teks, dest=target)
+				detection = trl.detect(text)
+				tekstr = trl.translate(text, dest=target)
 				if tekstr.pronunciation == None:
-					return message.reply_text("Translated from `{}` to `{}`:\n`{}`".format(deteksibahasa.lang, target, tekstr.text), parse_mode=ParseMode.MARKDOWN)
+					return message.reply_text("Translated from `{}` to `{}`:\n`{}`".format(detection.lang, target, tekstr.text), parse_mode=ParseMode.MARKDOWN)
 				else:
-					return message.reply_text("Translated from `{}` to `{}`:\n*Characters:*\n`{}`\n*Text:*\n`{}`".format(deteksibahasa.lang, target, tekstr.text, tekstr.pronunciation), parse_mode=ParseMode.MARKDOWN)
+					return message.reply_text("Translated from `{}` to `{}`:\n*Characters:*\n`{}`\n*Text:*\n`{}`".format(detection.lang, target, tekstr.text, tekstr.pronunciation), parse_mode=ParseMode.MARKDOWN)
 			else:
-				tekstr = trl.translate(teks, dest=target2, src=target)
+				tekstr = trl.translate(text, dest=target2, src=target)
 				if tekstr.pronunciation == None:
 					return message.reply_text("Translated from `{}` to `{}`:\n`{}`".format(target, target2, tekstr.text), parse_mode=ParseMode.MARKDOWN)
 				else:
@@ -92,23 +92,23 @@ def terjemah(bot: Bot, update: Update):
 			if "-" in target:
 				target2 = target.split("-")[1]
 				target = target.split("-")[0]
-			teks = msg.reply_to_message.text
-			#teks = deEmojify(teks)
+			text = msg.reply_to_message.text
+			#text = deEmojify(text)
 			exclude_list = UNICODE_EMOJI.keys()
 			for emoji in exclude_list:
 				if emoji in teks:
-					teks = teks.replace(emoji, '')
+					text = text.replace(emoji, '')
 			message = update.effective_message
 			trl = Translator()
 			if target2 == None:
-				deteksibahasa = trl.detect(teks)
-				tekstr = trl.translate(teks, dest=target)
+				detection = trl.detect(text)
+				tekstr = trl.translate(text, dest=target)
 				if tekstr.pronunciation == None:
-					return message.reply_text("Translated from `{}` to `{}`:\n`{}`".format(deteksibahasa.lang, target, tekstr.text), parse_mode=ParseMode.MARKDOWN)
+					return message.reply_text("Translated from `{}` to `{}`:\n`{}`".format(detection.lang, target, tekstr.text), parse_mode=ParseMode.MARKDOWN)
 				else:
-					return message.reply_text("Translated from `{}` to `{}`:\n`{}`".format(deteksibahasa.lang, target, tekstr.pronunciation), parse_mode=ParseMode.MARKDOWN)
+					return message.reply_text("Translated from `{}` to `{}`:\n`{}`".format(detection.lang, target, tekstr.pronunciation), parse_mode=ParseMode.MARKDOWN)
 			else:
-				tekstr = trl.translate(teks, dest=target2, src=target)
+				tekstr = trl.translate(text, dest=target2, src=target)
 				if tekstr.pronunciation == None:
 					return message.reply_text("Translated from `{}` to `{}`:\n`{}`".format(target, target2, tekstr.text), parse_mode=ParseMode.MARKDOWN)
 				else:
@@ -117,12 +117,12 @@ def terjemah(bot: Bot, update: Update):
 		else:
 			args = update.effective_message.text.split(None, 2)
 			target = args[1]
-			teks = args[2]
-			#teks = deEmojify(teks)
+			text = args[2]
+			#text = deEmojify(text)
 			exclude_list = UNICODE_EMOJI.keys()
 			for emoji in exclude_list:
-				if emoji in teks:
-					teks = teks.replace(emoji, '')
+				if emoji in text:
+					text = text.replace(emoji, '')
 			target2 = None
 			if "-" in target:
 				target2 = target.split("-")[1]
@@ -130,15 +130,15 @@ def terjemah(bot: Bot, update: Update):
 			message = update.effective_message
 			trl = Translator()
 			if target2 == None:
-				deteksibahasa = trl.detect(teks)
-				tekstr = trl.translate(teks, dest=target)
-				return message.reply_text("Translated from `{}` to `{}`:\n`{}`".format(deteksibahasa.lang, target, tekstr.text), parse_mode=ParseMode.MARKDOWN)
+				detection = trl.detect(text)
+				tekstr = trl.translate(text, dest=target)
+				return message.reply_text("Translated from `{}` to `{}`:\n`{}`".format(detection.lang, target, tekstr.text), parse_mode=ParseMode.MARKDOWN)
 				#if tekstr.pronunciation == None:
-				#	return message.reply_text("Translated from `{}` to `{}`:\n`{}`".format(deteksibahasa.lang, target, tekstr.text), parse_mode=ParseMode.MARKDOWN)
+				#	return message.reply_text("Translated from `{}` to `{}`:\n`{}`".format(detection.lang, target, tekstr.text), parse_mode=ParseMode.MARKDOWN)
 				#else:
-				#	return message.reply_text("Translated from `{}` to `{}`:\n`{}`".format(deteksibahasa.lang, target, tekstr.pronunciation), parse_mode=ParseMode.MARKDOWN)
+				#	return message.reply_text("Translated from `{}` to `{}`:\n`{}`".format(detection.lang, target, tekstr.pronunciation), parse_mode=ParseMode.MARKDOWN)
 			else:
-				tekstr = trl.translate(teks, dest=target2, src=target)
+				tekstr = trl.translate(text, dest=target2, src=target)
 				message.reply_text("Translated from `{}` to `{}`:\n`{}`".format(target, target2, tekstr.text), parse_mode=ParseMode.MARKDOWN)
 				#if tekstr.pronunciation == None:
 				#	return message.reply_text("Translated from `{}` to `{}`:\n`{}`".format(target, target2, tekstr.text), parse_mode=ParseMode.MARKDOWN)
@@ -157,6 +157,6 @@ __help__ = """- /tr (language code) as reply to a long message.
 """
 __mod_name__ = "Translator"
 
-TERJEMAH_HANDLER = DisableAbleCommandHandler("tr", terjemah)
+TOTRANSLATE_HANDLER = DisableAbleCommandHandler("tr", totranslate)
 
-dispatcher.add_handler(TERJEMAH_HANDLER)
+dispatcher.add_handler(TOTRANSLATE_HANDLER)
