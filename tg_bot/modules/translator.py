@@ -96,7 +96,7 @@ def totranslate(bot: Bot, update: Update):
 			#text = deEmojify(text)
 			exclude_list = UNICODE_EMOJI.keys()
 			for emoji in exclude_list:
-				if emoji in teks:
+				if emoji in text:
 					text = text.replace(emoji, '')
 			message = update.effective_message
 			trl = Translator()
