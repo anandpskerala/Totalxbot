@@ -343,7 +343,7 @@ INVITE_HANDLER = CommandHandler("invitelink", invite)
 
 PROMOTE_HANDLER = CommandHandler("promote", promote, pass_args=True)
 DEMOTE_HANDLER = CommandHandler("demote", demote, pass_args=True)
-
+PERMAPIN_HANDLER = CommandHandler("permapin", permapin, filters=Filters.group)
 REACT_HANDLER = CommandHandler("reaction", reaction, pass_args=True, filters=Filters.group)
 
 ADMINLIST_HANDLER = DisableAbleCommandHandler(["adminlist", "admins"], adminlist)
@@ -355,3 +355,4 @@ dispatcher.add_handler(PROMOTE_HANDLER)
 dispatcher.add_handler(DEMOTE_HANDLER)
 dispatcher.add_handler(ADMINLIST_HANDLER)
 dispatcher.add_handler(REACT_HANDLER)
+dispatcher.add_handler(PERMAPIN_HANDLER)
