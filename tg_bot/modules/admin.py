@@ -193,6 +193,49 @@ def unpin(bot: Bot, update: Update) -> str:
            "\n<b>Admin:</b> {}".format(html.escape(chat.title),
                                        mention_html(user.id, user.first_name))
 
+@can_pin
+@user_admin
+@run_async
+def permapin(bot: Bot, update: Update):
+    chat = update.effective_chat  # type: Optional[Chat]
+    user = update.effective_user  # type: Optional[User]
+    message = update.effective_message  # type: Optional[Message]
+
+
+    conn = connected(bot, update, chat, user.id, need_admin=False)
+    if conn:
+        chat = dispatcher.bot.getChat(conn)
+        chat_id = conn
+        chat_name = dispatcher.bot.getChat(conn).title
+    else:
+        if update.effective_message.chat.type == "private":
+            update.effective_message.reply_text("You can do this command in the group, not in PM")
+            return ""
+        chat = update.effective_chat
+        chat_id = update.effective_chat.id
+        chat_name = update.effective_message.chat.title
+
+    text, data_type, content, buttons = get_message_type(message)
+    tombol = build_keyboard_alternate(buttons)
+    try:
+        message.delete()
+    except BadRequest:
+        pass
+    if str(data_type) in ('Types.BUTTON_TEXT', 'Types.TEXT'):
+        try:
+            sendingmsg = bot.send_message(chat_id, text, parse_mode="markdown",
+                                 disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup(tombol))
+        except BadRequest:
+            bot.send_message(chat_id, "Incorrect markdown text! \nIf you don't know what markdown is, please type `/markdownhelp` in PM.", parse_mode="markdown")
+            return
+    else:
+        sendingmsg = ENUM_FUNC_MAP[str(data_type)](chat_id, content, caption=text, parse_mode="markdown", disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup(tombol))
+    try:
+        bot.pinChatMessage(chat_id, sendingmsg.message_id)
+    except BadRequest:
+        update.effective_message.reply_text("I don't have access to message pins!")
+
+
 
 @run_async
 @bot_admin
