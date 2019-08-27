@@ -10,3 +10,4 @@ googletrans
 Pillow>=4.2.0
 #stuff_for_Text-To-Speech
 gTTS
+currency_converter
