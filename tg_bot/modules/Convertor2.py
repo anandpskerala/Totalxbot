@@ -9,7 +9,7 @@ from tg_bot import dispatcher
 def convert(bot: Bot, update: Update):
     args = update.effective_message.text.split(None, 3)
     if len(args) > 1:
-        orig_cur = args[1]
+        orig_cur = float(args[1])
 
         try:
             orig_rate = args[2].upper()
