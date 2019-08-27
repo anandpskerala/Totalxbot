@@ -1,4 +1,5 @@
 from currency_converter import CurrencyConverter
+import requests
 
 from telegram import Update, Bot
 from telegram.ext import CommandHandler
